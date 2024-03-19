@@ -36,10 +36,16 @@ class Pokemon{
         this.#name = nomPokemon;
     }
 
+    /**
+     * @returns {string} Lien de l'image du pokémon
+     */
     getImageLink() {
         return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.#id}.png`;
     }
 
+    /**
+     * @returns {string} Nom du pokémon
+     */
     getName() {
         return this.#name;
     }

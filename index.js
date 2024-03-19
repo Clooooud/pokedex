@@ -1,10 +1,10 @@
 import Pokedex from "./model/pokedex.js";
 
-const pokelist = document.getElementById("pokelist");
+const pokelist = document.getElementById("poke-list");
 const pageSpan = document.getElementById("page");
 
 const pokemonToRow = (pokemon) => {
-    const listElement = document.createElement("li");
+    const listElement = document.createElement("div");
     const nameElement = document.createElement("p");
     const imgElement = document.createElement("img");
 
@@ -13,6 +13,9 @@ const pokemonToRow = (pokemon) => {
 
     listElement.append(imgElement);
     listElement.append(nameElement);
+    listElement.onclick = () => {
+        pokedex.select(pokemon);
+    };
     return listElement;
 };
 
@@ -23,6 +26,7 @@ const updateList = () => {
 };
 
 const pokedex = new Pokedex();
+
 window.loadPokemons = async () => {
     await pokedex.fetchPokemons();
     updateList();

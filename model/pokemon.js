@@ -50,6 +50,13 @@ class Pokemon{
         return this.#name;
     }
 
+    /**
+     * @returns {number} Id du pokémon
+     */
+    getId() {
+        return this.#id;
+    }
+
 
 
 }

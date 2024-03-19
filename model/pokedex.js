@@ -73,6 +73,13 @@ class Pokedex {
     }
 
     /**
+     *  @param {Pokemon} pokemon Pokemon à sélectionner
+     */
+    select(pokemon) {
+        this.#selection = pokemon.getId();
+    }
+
+    /**
      * @param {number} offset Le décalage a ajouté à la page actuelle
      * @returns {boolean} Vrai si la page a changé
      */

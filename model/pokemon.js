@@ -4,14 +4,13 @@ class Pokemon{
      * Nom du pokémon
      * @type {string}
      */
-    #nom; 
+    #name; 
     
     /**
      * Id du pokemon
      * @type{number}
      */
     #id
-
 
     /**
      * Stats du pokemon
@@ -34,12 +33,16 @@ class Pokemon{
      */
     constructor(id, nomPokemon){
         this.#id = id;
-        this.#nom = nomPokemon;
+        this.#name = nomPokemon;
     }
 
+    getImageLink() {
+        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.#id}.png`;
+    }
 
-
-
+    getName() {
+        return this.#name;
+    }
 
 
 

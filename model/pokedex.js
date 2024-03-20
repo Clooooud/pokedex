@@ -27,6 +27,18 @@ class Pokedex {
      * @see #POKEMONS_PER_PAGE
      */
     #page;
+
+    /**
+     * Recherche actuelle
+     * @type {String}
+     */
+    #search;
+
+    /**
+     * Cache de la recherche
+     * @type {Array}
+     */
+    #searchedCache;
     
     constructor() {
         this.#pokemons = [];
@@ -38,15 +50,22 @@ class Pokedex {
      * Récupère la liste de pokémon depuis l'API
      */
     async fetchPokemons() {
+        if (this.#pokemons.length > 0) {
+            return;
+        }
+
         await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${Pokedex.#NUMBER_OF_POKEMONS}`)
-            .then(response => response.json())
             .then(json => json.results)
             .then(results => {
                 results.forEach((pokemon, id) => this.#pokemons.push(
                     // +1 car l'id commence à 1
-                    new Pokemon(id+1, pokemon.name)
+                    new Pokemon(id+1)
                 ))
             });
+    }
+
+    getPokemon(id) {
+        return this.#pokemons.filter(pokemon => pokemon.id == id)[0];
     }
 
     /**
@@ -54,13 +73,19 @@ class Pokedex {
      * @see Pokemon
      */
     getPokemons() {
+        if (this.#search) {
+            if (!this.#searchedCache) {
+                this.#searchedCache = this.#pokemons.filter(pokemon => pokemon.name.includes(this.#search));
+            }
+            return this.#searchedCache;
+        }
         return this.#pokemons;
     }
 
     /**
      * @returns {number} Page actuelle
      */
-    getPage() {
+    get page() {
         return this.#page;
     }
 
@@ -68,7 +93,7 @@ class Pokedex {
      * @returns {Pokemon} Pokemon sélectionné
      * @see Pokemon
      */
-    getSelection() {
+    get selection() {
         return this.#selection;
     }
 
@@ -76,7 +101,7 @@ class Pokedex {
      *  @param {Pokemon} pokemon Pokemon à sélectionner
      */
     select(pokemon) {
-        this.#selection = pokemon.getId();
+        this.#selection = pokemon.id;
     }
 
     /**
@@ -87,7 +112,13 @@ class Pokedex {
         const oldPage = this.#page;
 
         this.#page += offset;
-        this.#page = Math.max(0, Math.min(this.#page, this.getPageMax()));
+        if (this.#page < 0) {
+            this.#page = this.getPageMax();
+        }
+
+        if (this.#page > this.getPageMax()) {
+            this.#page = 0;
+        }
 
         return oldPage !== this.#page;
     }
@@ -97,7 +128,7 @@ class Pokedex {
      * @see #POKEMONS_PER_PAGE
      */
     getPageMax() {
-        return Math.floor(this.#pokemons.length / Pokedex.#POKEMONS_PER_PAGE);
+        return Math.floor(this.getPokemons().length / Pokedex.#POKEMONS_PER_PAGE);
     }
 
     /**
@@ -105,7 +136,13 @@ class Pokedex {
      * @see Pokemon
      */
     getPokemonsOnPage() {
-        return this.#pokemons.slice(this.#page * Pokedex.#POKEMONS_PER_PAGE, (this.#page + 1) * Pokedex.#POKEMONS_PER_PAGE);
+        return this.getPokemons().slice(this.#page * Pokedex.#POKEMONS_PER_PAGE, (this.#page + 1) * Pokedex.#POKEMONS_PER_PAGE);
+    }
+
+    search(research) {
+        this.#search = research;
+        this.#searchedCache = null;
+        this.#page = 0;
     }
 }
 

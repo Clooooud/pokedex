@@ -9,6 +9,7 @@
 <body>
     <div>
         <input type="text" id="searchBar"/>
+        <button onclick="search()">&#128269;</button>
         <button onclick="loadPokemons()">Load</button>
         <button onclick="previous()">&#60;</button>
         <button onclick="next()">></button>
@@ -16,8 +17,12 @@
     </div>
     <div id="pokedex">
         <div id="poke-list"></div>
-        <div id="poke-info">
-
+        <div id="poke-info" class="hide">
+            <div>
+                <img id="poke-img" src="" alt="">
+                <span id="poke-name"></span>
+                <div id="types"></div>
+            </div>
         </div>
     </div>
 

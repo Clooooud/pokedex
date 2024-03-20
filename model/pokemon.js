@@ -1,3 +1,7 @@
+import Type from "./type.js";
+import Ability from "./ability.js";
+import Stat from "./stat.js";
+
 class Pokemon{
 
     /***
@@ -8,57 +12,123 @@ class Pokemon{
     
     /**
      * Id du pokemon
-     * @type{number}
+     * @type {Number}
      */
-    #id
+    #id;
+
+    /**
+     * Hauteur en cm
+     * @type {Number}
+     */
+    #height;
 
     /**
      * Stats du pokemon
-     * @type{Array}
+     * @type {Array}
+     * @see fetchInfo
      */
-    #stats
+    #stats;
 
-    // TODO: getCrie directement
-    #cries
+    /**
+     * URL de l'audio .ogg
+     * @type {String}
+     */
+    #cry;
 
-    // TODO: faut faire un getTypes avec les noms
-    #type 
+    /**
+     * Types du pokémon
+     * @type {Array} {}
+     * @see fetchInfo
+     */
+    #types;
 
-    #abilities
+    /**
+     * Abilitées du pokémon
+     * @type {Array}
+     * @see fetchInfo
+     */
+    #abilities;
+
+    /**
+     * Sprites du pokémon
+     * @type {Object}
+     * @see fetchInfo
+     */
+    #sprites;
 
 
     /**
      * @param {number} id 
      * @param {string} nomPokemon
      */
-    constructor(id, nomPokemon){
+    constructor(id){
         this.#id = id;
-        this.#name = nomPokemon;
+    }
+
+    async fetchName() {
+        const jsonSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
+        this.#name = jsonSpecies.names[7].name;
+    }
+
+    async fetchInfo() {
+        const json = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
+
+        this.#height = json.height * 10; // Hauteur en décimètre de base
+        this.#cry = json.cries.latest;
+        this.#sprites = {
+            "back": json.sprites.back_default,
+            "front": json.sprites.front_default
+        }
+
+        this.#types = []
+        json.types.forEach(type => {
+            this.#types.push(new Type(type.type.name));
+        });
+        
+        this.#stats = [];
+        json.stats.forEach(stat => {
+            this.#stats.push(new Stat(stat.base_stat, stat.stat.name)); 
+        });
+        
+        this.#abilities = [];
+        json.abilities.forEach(ability => {
+            this.#abilities.push(new Ability(ability.ability.name));
+        });
     }
 
     /**
      * @returns {string} Lien de l'image du pokémon
      */
-    getImageLink() {
+    get imageLink() {
         return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.#id}.png`;
     }
 
     /**
      * @returns {string} Nom du pokémon
      */
-    getName() {
+    get name() {
         return this.#name;
     }
 
     /**
      * @returns {number} Id du pokémon
      */
-    getId() {
+    get id() {
         return this.#id;
     }
 
 
+    get stats(){
+        return this.#stats;  
+    }
+    
+    get sprites() {
+        return this.#sprites;
+    }
 
+    get types() {
+        return this.#types;
+    }
 }
 
 export default Pokemon;

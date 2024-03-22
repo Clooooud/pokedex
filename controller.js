@@ -43,6 +43,10 @@ class Controller {
         for (let buttonId = 0; buttonId < view.keyboard.children.length; buttonId++) {
             const button = view.keyboard.children[buttonId];
             button.addEventListener("click", () => {
+                // Si on en a sélectionné un avant, on le désélectionne
+                document.querySelector(".selected")?.classList.remove("selected");
+                button.classList.add("selected");
+
                 const pokemon = this.#pokedex.getPokemonsOnPage()[buttonId];
                 this.#pokedex.select(pokemon);
                 //this.updateScreen();

@@ -4,8 +4,8 @@
     --pokedex-color: hsl(var(--hue-color), var(--satur), 40%);
     --slight-darker-pokedex-color: hsl(var(--hue-color), var(--satur), 30%);
     --darker-pokedex-color: hsl(var(--hue-color), var(--satur), 20%);
-    --button-start: #1e8ac2;
-    --button-end: #16567e;
+    --button-start: #3336;
+    --button-end: #222;
 }
 
 body {
@@ -182,7 +182,7 @@ body {
     align-items: center;
 }
 
-.button:active {
+.button:active, .selected {
     background: linear-gradient(var(--button-end), var(--button-start));
 }
 

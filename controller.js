@@ -19,6 +19,12 @@ class Controller {
     }
 
     #listenEvents() {
+        view.closeSearchButton.addEventListener("click", () => {
+            view.searchInput.value = "";
+            this.#pokedex.search("");
+            this.updateList();
+        });
+
         view.searchButton.addEventListener("click", () => {
             this.#pokedex.search(view.searchInput.value);
             this.updateList();

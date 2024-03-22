@@ -62,6 +62,12 @@ class Pokemon{
      */
     #sprites;
 
+    /**
+     * Booléen pour savoir si le pokémon est favoris
+     * @type {Boolean}
+     */
+    #isFavorite;
+
 
     /**
      * @param {number} id 
@@ -124,6 +130,14 @@ class Pokemon{
      */
     get id() {
         return this.#id;
+    }
+
+    get isFavorite() {
+        return this.#isFavorite;
+    }
+
+    set isFavorite(value) {
+        this.#isFavorite = value;
     }
 
     /**

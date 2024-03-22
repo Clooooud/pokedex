@@ -98,3 +98,24 @@ body {
     width: 50px;
     font-size: 24px;
 }
+
+#screenBorder{
+    display:  flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 20%;
+    left: 11.5%;
+    width: 17.5em;
+    height: 15em;
+    background-color: #b0b0b0;
+    border-radius: 44px;
+}
+#screen{
+    background-color: white;
+    width: 15em;
+    height: 12.5em;
+    border: 2px solid black;
+    border-radius: 30px;
+    box-sizing: border-box;
+}

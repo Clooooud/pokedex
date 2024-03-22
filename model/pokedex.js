@@ -40,15 +40,8 @@ class Pokedex {
      */
     #searchedCache;
 
-    /**
-     * Liste des favoris
-     * @type {Array}
-     */
-    #favoritesPokemon;
-
     constructor() {
         this.#pokemons = [];
-        this.#favoritesPokemon = [];
         this.#selection = null;
         this.#page = 0;
     }
@@ -106,8 +99,8 @@ class Pokedex {
     /**
      * @returns {Array} Liste des Pokémon Favoris
      */
-    get favoritesPokemon(){
-        return this.#favoritesPokemon;
+    getFavoritesPokemon(){
+        return this.#pokemons.filter(pokemon => pokemon.isFavorite);
     }
 
     /**
@@ -163,7 +156,7 @@ class Pokedex {
      * @param {Number} idPokemon Pokemon à ajouter 
      */
     addFavorite(idPokemon){
-        this.#favoritesPokemon.push(idPokemon);
+        this.getPokemon(idPokemon).isFavorite = true;
         this.saveFavorites();
     }
 
@@ -171,17 +164,15 @@ class Pokedex {
      * Sauvegarde les pokemon favoris
      */
     saveFavorites(){
-        localStorage.setItem("favorites", JSON.stringify(this.#favoritesPokemon));
+        localStorage.setItem("favorites", JSON.stringify(this.#pokemons.filter(pokemon => pokemon.isFavorite).map(pokemon => pokemon.id)));
     }
 
     /**
      * Reccupère les pokémon favoris sauvegarder
      */
     loadFavorites(){
-        this.#favoritesPokemon = JSON.parse(localStorage.getItem("favorites")).map(pokemonId => this.getPokemon(pokemonId));
+        JSON.parse(localStorage.getItem("favorites")).forEach(pokemonId => this.getPokemon(pokemonId).isFavorite = true);
     }
-
-
 }
 
 export default Pokedex;

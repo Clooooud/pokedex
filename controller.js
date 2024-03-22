@@ -2,6 +2,7 @@ import Pokedex from "./model/pokedex.js";
 import view from "./view.js";
 
 class Controller {
+
     /**
      * Pokedex
      * @type {Pokedex}
@@ -14,7 +15,6 @@ class Controller {
 
     init() {
         this.#listenEvents();
-
         this.#load();
     }
 

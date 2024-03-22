@@ -11,6 +11,7 @@ const view = {
     mainCategoryButton: document.getElementById("main-category"),
     favoriteCategoryButton: document.getElementById("favorite-category"),
     favoriteCategory: document.getElementById("favorite-button"),
+    idScreen : document.getElementById("id-screen"),
 }
 
 export default view;

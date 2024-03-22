@@ -50,6 +50,8 @@ class Controller {
                 const pokemon = this.#pokedex.getPokemonsOnPage()[buttonId];
                 this.#pokedex.select(pokemon);
                 //this.updateScreen();
+                view.idScreen.innerHTML = pokemon.id.toString();
+
             });
         }
     }

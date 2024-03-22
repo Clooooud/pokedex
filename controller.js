@@ -23,32 +23,12 @@ class Controller {
     }
 
     #listenEvents() {
-        // Fermeture de la recherche
-        view.closeSearchButton.addEventListener("click", () => {
-            view.searchInput.value = "";
-            this.#pokedex.search(null);
-            this.#updatePageDisplay();
-            this.#updateList();
-        });
+        view.closeSearchButton.addEventListener("click", () => this.#clearSearch());
 
-        // Recherche
-        view.searchButton.addEventListener("click", () => {
-            this.#pokedex.search(view.searchInput.value);
-            this.#updatePageDisplay();
-            this.#updateList();
-        });
+        view.searchButton.addEventListener("click", () => this.#search());
 
-        // Bouton pour changer de page
-        view.previousButton.addEventListener("click", () => {
-            this.#pokedex.changePage(-1);
-            this.#updatePageDisplay();
-            this.#updateList();
-        });
-        view.nextButton.addEventListener("click", () => {
-            this.#pokedex.changePage(1);
-            this.#updatePageDisplay();
-            this.#updateList();
-        });
+        view.previousButton.addEventListener("click", () => this.#changePage(-1));
+        view.nextButton.addEventListener("click", () => this.#changePage(1));
 
         view.favoriteCategoryButton.addEventListener("click", () => this.#goToFavorites());
         view.mainCategoryButton.addEventListener("click", () => this.#goToMainMenu());
@@ -59,6 +39,25 @@ class Controller {
             const button = view.keyboard.children[buttonId];
             button.addEventListener("click", () => this.#selectPokemon(buttonId));
         }
+    }
+
+    #clearSearch() {
+        view.searchInput.value = "";
+        this.#pokedex.search(null);
+        this.#updatePageDisplay();
+        this.#updateList();
+    }
+
+    #search() {
+        this.#pokedex.search(view.searchInput.value);
+        this.#updatePageDisplay();
+        this.#updateList();
+    }
+    
+    #changePage(offset) {
+        this.#pokedex.changePage(offset);
+        this.#updatePageDisplay();
+        this.#updateList();
     }
 
     #selectPokemon(buttonId) {
@@ -170,13 +169,22 @@ class Controller {
     }
 }
 
+/**
+ * Récupère les données de l'API et les stocke dans le localStorage
+ * Différence avec le fetch classique : on récupère directement le contenu sous format json et on le stocke dans le localStorage
+ * 
+ * On stocke le json avec pour clé l'url de la requête, on peut donc retrouver très facilement les données
+ * 
+ * @param {String} url 
+ * @returns 
+ */
 window.pokeFetch = async (url) => {
     const item = localStorage.getItem(url);
     if (item){
         return JSON.parse(item);
     }
 
-    const result = await (await fetch(url)).json();
+    const result = await fetch(url).then(response => response.json());
     localStorage.setItem(url, JSON.stringify(result));
     return result;
 }

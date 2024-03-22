@@ -1,4 +1,5 @@
 const view = {
+    // Partie droite
     searchInput: document.getElementById("search"),
     searchButton: document.getElementById("search-button"),
 
@@ -10,6 +11,8 @@ const view = {
 
     mainCategoryButton: document.getElementById("main-category"),
     favoriteCategoryButton: document.getElementById("favorite-category"),
+
+    // Partie gauche
     favoriteButton: document.getElementById("favorite-button"),
     idScreen : document.getElementById("id-screen"),
     closeSearchButton: document.getElementById("close-search"),

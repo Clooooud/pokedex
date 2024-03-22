@@ -65,20 +65,18 @@ class Pokemon{
         this.#id = id;
     }
 
-    async fetchName() {
-        const jsonSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
-        this.#name = jsonSpecies.names[7].name;
-    }
-
     async fetchInfo() {
-        const json = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
+        const json = await pokeFetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
+        const jsonSpecies = await pokeFetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
 
+        // TODO: langage
+        this.#name = jsonSpecies.names[7].name;
         this.#height = json.height * 10; // Hauteur en décimètre de base
         this.#cry = json.cries.latest;
         this.#sprites = {
             "back": json.sprites.back_default,
             "front": json.sprites.front_default
-        }
+        };
 
         this.#types = []
         json.types.forEach(type => {

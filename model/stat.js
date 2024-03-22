@@ -21,7 +21,7 @@ class Stat{
     }
 
     async fetchStat(idString){
-        const json = await fetch(`https://pokeapi.co/api/v2/stat/${idString}/`);
+        const json = await pokeFetch(`https://pokeapi.co/api/v2/stat/${idString}/`);
 
         this.#name = json.names[7].name;
     }

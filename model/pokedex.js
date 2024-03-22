@@ -54,7 +54,7 @@ class Pokedex {
             return;
         }
 
-        await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${Pokedex.#NUMBER_OF_POKEMONS}`)
+        await pokeFetch(`https://pokeapi.co/api/v2/pokemon/?limit=${Pokedex.#NUMBER_OF_POKEMONS}`)
             .then(json => json.results)
             .then(results => {
                 results.forEach((pokemon, id) => this.#pokemons.push(

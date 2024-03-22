@@ -69,15 +69,13 @@ window.previous = () => {
     }
 }
 
-const oldFetch = window.fetch;
-
-window.fetch = async (url)=>{
+window.pokeFetch = async (url) => {
     const item = localStorage.getItem(url);
     if (item){
         return JSON.parse(item);
     }
 
-    const result = await (await oldFetch(url)).json();
+    const result = await (await fetch(url)).json();
     localStorage.setItem(url, JSON.stringify(result));
     return result;
 }

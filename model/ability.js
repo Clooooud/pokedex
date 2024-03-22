@@ -21,7 +21,7 @@ class Ability{
     }
 
     async #fetchAbility(){
-        const json = await fetch(`https://pokeapi.co/api/v2/ability/${this.#name}/`);
+        const json = await pokeFetch(`https://pokeapi.co/api/v2/ability/${this.#name}/`);
 
         this.#name = json.names[7].name;
         this.#description = json.effect_entries[0].short_effect;

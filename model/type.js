@@ -15,7 +15,7 @@ class Type {
     }
 
     async #fetchType(){
-        const json = await fetch(`https://pokeapi.co/api/v2/type/${this.#name}/`);
+        const json = await pokeFetch(`https://pokeapi.co/api/v2/type/${this.#name}/`);
 
         this.#name = json.names[7].name;
     }    

@@ -39,7 +39,13 @@ class Pokedex {
      * @type {Array}
      */
     #searchedCache;
-    
+
+    /**
+     * Liste des favoris
+     * @type {Array}
+     */
+    #favoritesPokemon;
+
     constructor() {
         this.#pokemons = [];
         this.#selection = null;
@@ -96,6 +102,12 @@ class Pokedex {
     get selection() {
         return this.#selection;
     }
+    /**
+     * @returns {Array} Liste des Pokémon Favoris
+     */
+    get favoritesPokemon(){
+        return this.#favoritesPokemon;
+    }
 
     /**
      *  @param {Pokemon} pokemon Pokemon à sélectionner
@@ -144,6 +156,31 @@ class Pokedex {
         this.#searchedCache = null;
         this.#page = 0;
     }
+
+    /**
+     * Ajoute un pokemon à la liste des Pokemon favorite
+     * @param {Pokemon} pokemon Pokemon à ajouter 
+     */
+    addFavorite(pokemon){
+        this.#favoritesPokemon.push(pokemon);
+        this.addFavorite();
+    }
+
+    /**
+     * Sauvegarde les pokemon favoris
+     */
+    saveFavorites(){
+        localStorage.setItem("favorites", JSON.stringify(this.#favoritesPokemon.map(pokemon=>pokemon.id)));
+    }
+
+    /**
+     * Reccupère les pokémon favoris sauvegarder
+     */
+    loadFavorites(){
+        this.#favoritesPokemon = JSON.parse(localStorage.getItem("favorites")).map(pokemonId => this.getPokemon(pokemonId));
+    }
+
+
 }
 
 export default Pokedex;

@@ -2,7 +2,10 @@ import Pokedex from "./model/pokedex.js";
 import view from "./view.js";
 
 class Controller {
-
+    /**
+     * Pokedex
+     * @type {Pokedex}
+     */
     #pokedex;
 
     constructor() {
@@ -31,6 +34,10 @@ class Controller {
             this.#pokedex.changePage(1);
             view.pageDisplay.innerHTML = `${this.#pokedex.page + 1}/${this.#pokedex.getPageMax() + 1}`;
             this.updateList();
+        });
+
+        view.favoriteCategory.addEventListener("click",()=>{
+            this.#pokedex.addFavorite(this.#pokedex.selection);
         });
 
         for (let buttonId = 0; buttonId < view.keyboard.children.length; buttonId++) {

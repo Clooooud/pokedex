@@ -10,6 +10,7 @@ const view = {
 
     mainCategoryButton: document.getElementById("main-category"),
     favoriteCategoryButton: document.getElementById("favorite-category"),
+    favoriteCategory: document.getElementById("button-add-favorite"),
 }
 
 export default view;

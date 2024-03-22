@@ -151,17 +151,17 @@ body {
     padding-bottom: 7px;
     font-size: 12px;
 
-    --button-start: #222;
+    --button-start: #333;
     --button-end: #111;
     color: #bbb;
 }
 
 .button {
     border: 0;
-    border-radius: 10px;
+    border-radius: 6px;
     background: linear-gradient(var(--button-start), var(--button-end));
     background-color: var(--button-start);
-    box-shadow: -2px 2px 1px 1px var(--button-end);
+    box-shadow: -2px 2px 1px 1px var(--button-end), inset 0 0 2px var(--button-end);
     cursor: pointer;
 }
 
@@ -174,7 +174,7 @@ body {
 }
 
 #category-div .button {
-    --button-start: #222;
+    --button-start: #333;
     --button-end: #111;
 
     flex-grow: 1;
@@ -184,9 +184,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
 }
 
-.button:active, .selected {
+.button:active, .selected, .toggled {
     background: linear-gradient(var(--button-end), var(--button-start));
 }
 
@@ -195,7 +196,7 @@ body {
     width: 50px;
     font-size: 24px;
     
-    --button-start: #222;
+    --button-start: #333;
     --button-end: #111;
 }
 
@@ -265,16 +266,12 @@ body {
     height: 60px;
     border: 0;
     border-radius: 100%;
-    --button-start: #222;
+    --button-start: #333;
     --button-end: #111;
     color: white;
 
     cursor: pointer;
     font-size: xx-large;
-}
-
-.button-add-favorite:active {
-    background: linear-gradient(#16567e, #1e8ac2);
 }
 
 #id-screen{

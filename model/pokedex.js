@@ -22,6 +22,12 @@ class Pokedex {
     #selection;
 
     /**
+     * Catégorie actuelle
+     * @type {String}
+     */
+    #category;
+
+    /**
      * Page actuelle
      * @type {number}
      * @see #POKEMONS_PER_PAGE
@@ -44,6 +50,9 @@ class Pokedex {
         this.#pokemons = [];
         this.#selection = null;
         this.#page = 0;
+        this.#search = "";
+        this.#searchedCache = null;
+        this.#category = "all";
     }
 
     /**
@@ -73,13 +82,19 @@ class Pokedex {
      * @see Pokemon
      */
     getPokemons() {
+        let pokemons = this.#pokemons;
+
+        if (this.#category === "favorite") {
+            pokemons = pokemons.filter(pokemon => pokemon.isFavorite);
+        }
+
         if (this.#search) {
             if (!this.#searchedCache) {
-                this.#searchedCache = this.#pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(this.#search.toLowerCase()));
+                this.#searchedCache = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(this.#search.toLowerCase()));
             }
             return this.#searchedCache;
         }
-        return this.#pokemons;
+        return pokemons;
     }
 
     /**
@@ -99,15 +114,42 @@ class Pokedex {
     /**
      * @returns {Array} Liste des Pokémon Favoris
      */
-    getFavoritesPokemon(){
+    getFavoritesPokemon() {
         return this.#pokemons.filter(pokemon => pokemon.isFavorite);
+    }
+
+    cycleCategories() {
+        this.#category = this.#category === "all" ? "favorite" : "all";
+        this.search(null);
     }
 
     /**
      *  @param {Pokemon} pokemon Pokemon à sélectionner
      */
     select(pokemon) {
+        if (!pokemon) {
+            this.#selection = null;
+            return;
+        }
         this.#selection = pokemon.id;
+    }
+
+    /**
+     * Retourne vrai si le pokémon est favoris
+     * @param {Number} id 
+     * @returns {Boolean}
+     */
+    isFavorite(id) {
+        return this.getPokemon(id).isFavorite;
+    }
+
+    /**
+     * Retire un pokémon de la liste des favoris
+     * @param {Number} id 
+     */
+    removeFavorite(id) {
+        this.getPokemon(id).isFavorite = false;
+        this.saveFavorites();
     }
 
     /**
@@ -149,6 +191,15 @@ class Pokedex {
         this.#search = research;
         this.#searchedCache = null;
         this.#page = 0;
+    }
+
+    /**
+     * Renvoie la catégorie actuelle
+     * Peut être soit "all" soit "favorite"
+     * @returns {"all"|"favorite"} Catégorie actuelle
+     */
+    get category() {
+        return this.#category;
     }
 
     /**

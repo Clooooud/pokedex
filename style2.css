@@ -3,6 +3,8 @@
     --satur: 87%;
     --pokedex-color: hsl(var(--hue-color), var(--satur), 40%);
     --darker-pokedex-color: hsl(var(--hue-color), var(--satur), 20%);
+    --button-start: #1e8ac2;
+    --button-end: #16567e;
 }
 
 body {
@@ -124,25 +126,53 @@ body {
     padding: 5px;
     padding-bottom: 7px;
     font-size: 12px;
+
+    --button-start: #222;
+    --button-end: #111;
+    color: #bbb;
 }
 
 .button {
     border: 0;
     border-radius: 10px;
-    background: linear-gradient(#1e8ac2, #16567e);
-    background-color: #1e8ac2;
-    box-shadow: -2px 2px 1px 1px #16567e;
+    background: linear-gradient(var(--button-start), var(--button-end));
+    background-color: var(--button-start);
+    box-shadow: -2px 2px 1px 1px var(--button-end);
     cursor: pointer;
 }
 
-.button:active {
-    background: linear-gradient(#16567e, #1e8ac2);
+#category-div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
-#searchButton {
+#category-div .button {
+    --button-start: #222;
+    --button-end: #111;
+
+    flex-grow: 1;
+    height: 50px;
+    font-size: 32px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:active {
+    background: linear-gradient(var(--button-end), var(--button-start));
+}
+
+#search-button {
     height: 50px;
     width: 50px;
     font-size: 24px;
+    
+    --button-start: #222;
+    --button-end: #111;
 }
 
 #screenBorder{

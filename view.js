@@ -11,6 +11,8 @@ const view = {
     mainCategoryButton: document.getElementById("main-category"),
     favoriteCategoryButton: document.getElementById("favorite-category"),
     favoriteCategory: document.getElementById("favorite-button"),
+
+    closeSearchButton: document.getElementById("close-search"),
 }
 
 export default view;

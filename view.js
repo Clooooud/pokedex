@@ -13,6 +13,7 @@ const view = {
     favoriteCategory: document.getElementById("favorite-button"),
     idScreen : document.getElementById("id-screen"),
     closeSearchButton: document.getElementById("close-search"),
+    screen : document.getElementById("screen"),
 }
 
 export default view;

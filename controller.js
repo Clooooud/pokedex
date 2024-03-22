@@ -55,9 +55,9 @@ class Controller {
 
                 const pokemon = this.#pokedex.getPokemonsOnPage()[buttonId];
                 this.#pokedex.select(pokemon);
-                //this.updateScreen();
+                this.updateScreen(pokemon);
                 view.idScreen.innerHTML = pokemon.id.toString();
-
+                
             });
         }
     }
@@ -83,6 +83,15 @@ class Controller {
 
             button.append(img);
         }
+    }
+
+    updateScreen(pokemon){
+        let div = document.createElement("div");
+        let p = document.createElement("p");
+        p.innerHTML = pokemon.name;
+        div.append(p);
+        view.screen.append(div);
+        
     }
 }
 

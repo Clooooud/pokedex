@@ -70,6 +70,7 @@ body {
 #right {
     margin-top: 75px;
     height: 85%;
+    border-top-right-radius: 10px;
     border-bottom-right-radius: 40px;
     box-shadow: -36px 10px 1px 10px var(--darker-pokedex-color);
 

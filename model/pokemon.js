@@ -37,7 +37,7 @@ class Pokemon{
 
     /**
      * Types du pokémon
-     * @type {Array} {}
+     * @type {Array}
      * @see fetchInfo
      */
     #types;
@@ -72,24 +72,26 @@ class Pokemon{
 
     async fetchInfo() {
         const json = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
-
+        //Récupération de la taille du pokémon
         this.#height = json.height * 10; // Hauteur en décimètre de base
+        //Récupération des cries
         this.#cry = json.cries.latest;
+        //Récupération des sprites
         this.#sprites = {
             "back": json.sprites.back_default,
             "front": json.sprites.front_default
         }
-
+        // Récupération du/des types du pokemon dans le JSON puis sa création en Object de type Type 
         this.#types = []
         json.types.forEach(type => {
             this.#types.push(new Type(type.type.name));
         });
-        
+        // Récupération du/des stats du pokemon dans le JSON puis sa création en Object de type Stat
         this.#stats = [];
         json.stats.forEach(stat => {
             this.#stats.push(new Stat(stat.base_stat, stat.stat.name)); 
         });
-        
+        // Récupération du/des abilitées du pokemon dans le JSON puis sa création en Object de type Ability
         this.#abilities = [];
         json.abilities.forEach(ability => {
             this.#abilities.push(new Ability(ability.ability.name));
@@ -117,15 +119,21 @@ class Pokemon{
         return this.#id;
     }
 
-
+    /**
+     * @returns {Array} Liste des stats du pokémon
+     */
     get stats(){
         return this.#stats;  
     }
-    
+    /**
+     * @returns {Object} Sriptes du pokémon
+     */
     get sprites() {
         return this.#sprites;
     }
-
+    /**
+     * @returns {Array} Liste des types du pokémon
+     */
     get types() {
         return this.#types;
     }

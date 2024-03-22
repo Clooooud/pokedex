@@ -22,15 +22,22 @@ class Ability{
 
     async #fetchAbility(){
         const json = await pokeFetch(`https://pokeapi.co/api/v2/ability/${this.#name}/`);
-
-        this.#name = json.names[7].name;
-        this.#description = json.effect_entries[0].short_effect;
         
+        // Récupération du nom de l'abilitées dans le bon langage
+        this.#name = json.names[7].name;
+        // Récupération de la description de l'abilitées
+        this.#description = json.effect_entries[0].short_effect;
     }    
     
+    /**
+     * @returns {string} Nom de l'abilité
+     */
     get name(){
         return this.#name;
     }
+    /**
+     * @returns {string} Description de l'abilitées du pokémon
+     */
     get description(){
         return this.#description;
     }

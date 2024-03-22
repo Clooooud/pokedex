@@ -134,6 +134,8 @@ class Controller {
                 continue;
             }
 
+
+            
             const img = document.createElement("img");
             img.src = pokemonsOnPage[buttonId].imageLink;
 

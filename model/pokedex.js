@@ -222,7 +222,12 @@ class Pokedex {
      * Reccupère les pokémon favoris sauvegarder
      */
     loadFavorites(){
-        JSON.parse(localStorage.getItem("favorites")).forEach(pokemonId => this.getPokemon(pokemonId).isFavorite = true);
+        const favorites = localStorage.getItem("favorites");
+        if (!favorites) {
+            return;
+        }
+
+        JSON.parse(favorites).forEach(pokemonId => this.getPokemon(pokemonId).isFavorite = true);
     }
 }
 

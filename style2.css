@@ -2,7 +2,7 @@
     --hue-color: 0;
     --satur: 87%;
     --pokedex-color: hsl(var(--hue-color), var(--satur), 40%);
-    --darker-pokedex-color: hsl(var(--hue-color), var(--satur), 10%);
+    --darker-pokedex-color: hsl(var(--hue-color), var(--satur), 20%);
 }
 
 body {
@@ -58,9 +58,22 @@ body {
 
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
-#searchDiv {
+#keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 5px;
+}
+
+#keyboard .button {
+    width: 58px;
+    height: 40px;
+}
+
+#search-div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,12 +85,45 @@ body {
     width: 80%;
     font-size: 24px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 4px;
     background-color: #222222;
     color: white;
     
     padding: 0 10px;
     box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.8);
+}
+
+#page-div {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    gap: 10px;
+
+    justify-content: end;
+
+    align-items: center;
+}
+
+#page-display {
+    width: 60px;
+    height: 23px;
+    background-color: #222222;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.8);
+}
+
+#page-div .button {
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    padding-bottom: 7px;
+    font-size: 12px;
 }
 
 .button {

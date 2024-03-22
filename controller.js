@@ -9,7 +9,41 @@ class Controller {
         this.#pokedex = new Pokedex();
     }
 
-    async load() {
+    init() {
+        this.#listenEvents();
+
+        this.#load();
+    }
+
+    #listenEvents() {
+        view.searchButton.addEventListener("click", () => {
+            this.#pokedex.search(view.searchInput.value);
+            this.updateList();
+        });
+
+        view.previousButton.addEventListener("click", () => {
+            this.#pokedex.changePage(-1);
+            view.pageDisplay.innerHTML = `${this.#pokedex.page + 1}/${this.#pokedex.getPageMax() + 1}`;
+            this.updateList();
+        });
+
+        view.nextButton.addEventListener("click", () => {
+            this.#pokedex.changePage(1);
+            view.pageDisplay.innerHTML = `${this.#pokedex.page + 1}/${this.#pokedex.getPageMax() + 1}`;
+            this.updateList();
+        });
+
+        for (let buttonId = 0; buttonId < view.keyboard.children.length; buttonId++) {
+            const button = view.keyboard.children[buttonId];
+            button.addEventListener("click", () => {
+                const pokemon = this.#pokedex.getPokemonsOnPage()[buttonId];
+                this.#pokedex.select(pokemon);
+                //this.updateScreen();
+            });
+        }
+    }
+
+    async #load() {
         await this.#pokedex.fetchPokemons();
         this.updateList();
     }
@@ -17,11 +51,11 @@ class Controller {
     updateList() {
         const pokemonsOnPage = this.#pokedex.getPokemonsOnPage();
         console.log(pokemonsOnPage)
-        for (let buttonId in view.keyboard.children) {
+        for (let buttonId = 0; buttonId < 20; buttonId++) {
             const button = view.keyboard.children[buttonId];
             button.innerHTML = "";
 
-            if (buttonId > pokemonsOnPage.length) {
+            if (buttonId >= pokemonsOnPage.length) {
                 continue;
             }
 
@@ -44,4 +78,4 @@ window.pokeFetch = async (url) => {
     return result;
 }
 
-new Controller().load();
+new Controller().init();

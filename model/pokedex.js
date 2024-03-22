@@ -59,7 +59,7 @@ class Pokedex {
             .then(results => {
                 results.forEach((pokemon, id) => this.#pokemons.push(
                     // +1 car l'id commence à 1
-                    new Pokemon(id+1)
+                    new Pokemon(id+1, pokemon.name)
                 ))
             });
     }
@@ -75,7 +75,7 @@ class Pokedex {
     getPokemons() {
         if (this.#search) {
             if (!this.#searchedCache) {
-                this.#searchedCache = this.#pokemons.filter(pokemon => pokemon.name.includes(this.#search));
+                this.#searchedCache = this.#pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(this.#search.toLowerCase()));
             }
             return this.#searchedCache;
         }

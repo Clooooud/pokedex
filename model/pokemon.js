@@ -9,6 +9,12 @@ class Pokemon{
      * @type {string}
      */
     #name; 
+
+    /**
+     * Nom traduit du pokémon
+     * @type {string}
+     */
+    #translatedName;
     
     /**
      * Id du pokemon
@@ -61,8 +67,9 @@ class Pokemon{
      * @param {number} id 
      * @param {string} nomPokemon
      */
-    constructor(id){
+    constructor(id, name){
         this.#id = id;
+        this.#name = name;
     }
 
     async fetchInfo() {
@@ -70,7 +77,7 @@ class Pokemon{
         const jsonSpecies = await pokeFetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
 
         // TODO: langage
-        this.#name = jsonSpecies.names[7].name;
+        this.#translatedName = jsonSpecies.names[7].name;
         //Récupération de la taille du pokémon
         this.#height = json.height * 10; // Hauteur en décimètre de base
         //Récupération des cries
@@ -126,11 +133,19 @@ class Pokemon{
         return this.#stats;  
     }
     /**
-     * @returns {Object} Sriptes du pokémon
+     * @returns {Object} Sprites du pokémon
      */
     get sprites() {
         return this.#sprites;
     }
+
+    /**
+     * @returns {String} Nom traduit du pokémon
+     */
+    get translatedName() {
+        return this.#translatedName;
+    }
+
     /**
      * @returns {Array} Liste des types du pokémon
      */

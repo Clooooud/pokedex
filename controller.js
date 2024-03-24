@@ -163,11 +163,43 @@ class Controller {
         const pokemon = this.#pokedex.getPokemon(this.#pokedex.selection);
 
         let div = document.createElement("div");
-        let p = document.createElement("p");
-        p.innerHTML = pokemon.name;
-        div.append(p);
-        view.screen.append(div);
+        // Nom du Pokémon
+        let namePokemon = document.createElement("p");
+        namePokemon.innerHTML = pokemon.name;
+        namePokemon.style.textAlign = "center";
+        namePokemon.style.textTransform = "uppercase";
+        div.append(namePokemon);
+
+        // Sprites du Pokémon
+        let divImages = document.createElement("div");
+        console.log(pokemon.sprites);
         
+        let image1 = document.createElement("img");
+        image1.src = pokemon.sprites.front; 
+        divImages.append(image1);
+        
+        let image2 = document.createElement("img");
+        image2.src = pokemon.sprites.back;
+        
+        divImages.style.display = "flex";
+        divImages.style.justifyContent = "space-evenly";
+        divImages.append(image2);
+        div.append(divImages);
+
+        // Types du Pokémon
+        let divTypes = document.createElement("div");
+        console.log(pokemon.types);
+        pokemon.types.forEach(type =>{
+            let imageType = document.createElement("img");
+            imageType.src = type.imageLink();
+            divTypes.append(imageType);
+        });
+        div.append(divTypes);
+
+        
+
+
+        view.screen.append(div);
     }
 }
 

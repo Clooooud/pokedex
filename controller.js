@@ -193,6 +193,35 @@ class Controller {
         });
         div.append(divTypes);
 
+        let divStatsAndAbilities = document.createElement("div");
+        divStatsAndAbilities.style.display = "flex";
+        divStatsAndAbilities.style.flexDirection = "row";
+
+        // Stats du Pokémon 
+        let divStat = document.createElement("div");
+        divStat.style.padding= "10px";
+        pokemon.stats.forEach(stat =>{
+            let pStat = document.createElement("p");
+            pStat.innerHTML = stat.name + " : " + stat.value;
+            pStat.style.margin = "0%";
+            pStat.style.fontSize = "10px";
+            divStat.append(pStat);
+        });
+        divStatsAndAbilities.append(divStat);
+
+        // Ablility du Pokemon
+        let divAbilities = document.createElement("div");
+        divAbilities.style.padding= "10px";
+        pokemon.abilities.forEach(ability=>{
+            let pAbility = document.createElement("p");
+            pAbility.innerHTML = ability.name + " : " + ability.description;
+            pAbility.style.margin = "0%";
+            pAbility.style.fontSize = "10px";
+            divAbilities.append(pAbility);
+        });
+        divStatsAndAbilities.append(divAbilities);
+        div.append(divStatsAndAbilities);
+
         view.screen.append(div);
     }
 }

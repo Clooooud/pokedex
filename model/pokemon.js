@@ -166,6 +166,12 @@ class Pokemon{
     get types() {
         return this.#types;
     }
+    /**
+     * @returns {Array} Liste des abilities
+     */
+    get abilities(){
+        return this.#abilities;
+    }
 }
 
 export default Pokemon;

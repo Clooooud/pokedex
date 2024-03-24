@@ -146,20 +146,21 @@ class Controller {
     }
 
     async #updateScreen(){
-        view.screen.innerHTML = "";
-        
         if (this.#pokedex.selection === null) {
+            view.screen.innerHTML = "";
             view.idScreen.innerHTML = "";
             view.favoriteButton.classList.remove("toggled");
             view.favoriteButton.innerHTML = "♡";
             return;
         }
 
-        view.idScreen.innerHTML = "N°" + this.#pokedex.selection;
-        view.favoriteButton.innerHTML = this.#pokedex.isFavorite(this.#pokedex.selection) ? "❤️" : "♡";
-
         const pokemon = this.#pokedex.getPokemon(this.#pokedex.selection);
         await pokemon.fetch();
+
+        view.screen.innerHTML = "";
+
+        view.idScreen.innerHTML = "N°" + this.#pokedex.selection;
+        view.favoriteButton.innerHTML = this.#pokedex.isFavorite(this.#pokedex.selection) ? "❤️" : "♡";
 
         let div = document.createElement("div");
         // Nom du Pokémon
@@ -167,6 +168,16 @@ class Controller {
         namePokemon.innerHTML = pokemon.name;
         namePokemon.style.textAlign = "center";
         namePokemon.style.textTransform = "uppercase";
+
+        // Types du Pokémon
+        let divTypes = document.createElement("div");
+        pokemon.types.forEach(type =>{
+            let imageType = document.createElement("img");
+            imageType.src = type.imageLink;
+            divTypes.append(imageType);
+        });
+        namePokemon.append(divTypes);
+
         div.append(namePokemon);
 
         // Sprites du Pokémon
@@ -183,15 +194,6 @@ class Controller {
         divImages.style.justifyContent = "space-evenly";
         divImages.append(image2);
         div.append(divImages);
-
-        // Types du Pokémon
-        let divTypes = document.createElement("div");
-        pokemon.types.forEach(type =>{
-            let imageType = document.createElement("img");
-            imageType.src = type.imageLink;
-            divTypes.append(imageType);
-        });
-        div.append(divTypes);
 
         let divStatsAndAbilities = document.createElement("div");
         divStatsAndAbilities.style.display = "flex";

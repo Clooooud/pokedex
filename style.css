@@ -247,10 +247,18 @@ body {
 
 #screen{
     width: 90%;
-    height: 90%;
+    height: 285px;
     border: 0;
     border-radius: 30px;
     box-sizing: border-box;
+
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#screen::-webkit-scrollbar {
+    display: none;
 }
 
 #toolbar {

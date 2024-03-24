@@ -17,16 +17,26 @@ class Ability{
      */
     constructor(name){
         this.#name = name;
-        this.#fetchAbility();
     }
 
-    async #fetchAbility(){
+    async fetch(){
         const json = await pokeFetch(`https://pokeapi.co/api/v2/ability/${this.#name}/`);
         
         // Récupération du nom de l'abilitées dans le bon langage
         this.#name = json.names[7].name;
         // Récupération de la description de l'abilitées
-        this.#description = json.effect_entries[0].short_effect;
+        // Format du lien : https://pokeapi.co/api/v2/language/6/
+        // On voudrait le '6' ici par exemple.
+        this.#description = json.flavor_text_entries.find(entry => {
+            // Important de le définir dans la fonction pour éviter des erreurs
+            // car RegExp est horriblement mal fait ???
+            console.log(entry)
+            const regex = /language\/(\d+)\//g; // On récupère le numéro de la langue dans le lien
+            const result = regex.exec(entry.language.url);
+            console.log(result)
+            return result[1] === '9';
+        }).flavor_text;
+        console.log(this.#description)
     }    
     
     /**

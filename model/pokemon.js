@@ -96,19 +96,27 @@ class Pokemon{
 
         // Récupération du/des types du pokemon dans le JSON puis sa création en Object de type Type 
         this.#types = [];
-        json.types.forEach(type => {
-            this.#types.push(new Type(type.type.name));
-        });
+        await Promise.all(json.types.map(async type => {
+            const typeObject = new Type(type.type.name);
+            await typeObject.fetch();
+            this.#types.push(typeObject);
+        }));
+
         // Récupération du/des stats du pokemon dans le JSON puis sa création en Object de type Stat
         this.#stats = [];
-        json.stats.forEach(stat => {
-            this.#stats.push(new Stat(stat.base_stat, stat.stat.name)); 
-        });
+        await Promise.all(json.stats.map(async stat => {
+            const statObject = new Stat(stat.base_stat);
+            await statObject.fetch(stat.stat.name);
+            this.#stats.push(statObject); 
+        }));
+
         // Récupération du/des abilitées du pokemon dans le JSON puis sa création en Object de type Ability
         this.#abilities = [];
-        json.abilities.forEach(ability => {
-            this.#abilities.push(new Ability(ability.ability.name));
-        });
+        await Promise.all(json.abilities.map(async ability => {
+            const abilityObject = new Ability(ability.ability.name);
+            await abilityObject.fetch();
+            this.#abilities.push(abilityObject);
+        }));
     }
 
     /**
@@ -166,6 +174,7 @@ class Pokemon{
     get types() {
         return this.#types;
     }
+
     /**
      * @returns {Array} Liste des abilities
      */

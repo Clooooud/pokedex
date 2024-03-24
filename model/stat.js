@@ -15,13 +15,12 @@ class Stat{
      * @param {Number} value
      * @param {string} idString
      */
-    constructor(value, idString){
+    constructor(value){
         // Récupération de la valeur du Stat
         this.#value = value;
-        this.fetchStat(idString);
     }
 
-    async fetchStat(idString){
+    async fetch(idString){
         const json = await pokeFetch(`https://pokeapi.co/api/v2/stat/${idString}/`);
         // Récupération du nom du stat dans le bon langage
         this.#name = json.names[7].name;

@@ -133,8 +133,6 @@ class Controller {
             if (buttonId >= pokemonsOnPage.length) {
                 continue;
             }
-
-
             
             const img = document.createElement("img");
             img.src = pokemonsOnPage[buttonId].imageLink;
@@ -147,7 +145,7 @@ class Controller {
         }
     }
 
-    #updateScreen(){
+    async #updateScreen(){
         view.screen.innerHTML = "";
         
         if (this.#pokedex.selection === null) {
@@ -161,6 +159,7 @@ class Controller {
         view.favoriteButton.innerHTML = this.#pokedex.isFavorite(this.#pokedex.selection) ? "❤️" : "♡";
 
         const pokemon = this.#pokedex.getPokemon(this.#pokedex.selection);
+        await pokemon.fetch();
 
         let div = document.createElement("div");
         // Nom du Pokémon
@@ -172,7 +171,6 @@ class Controller {
 
         // Sprites du Pokémon
         let divImages = document.createElement("div");
-        console.log(pokemon.sprites);
         
         let image1 = document.createElement("img");
         image1.src = pokemon.sprites.front; 
@@ -188,16 +186,12 @@ class Controller {
 
         // Types du Pokémon
         let divTypes = document.createElement("div");
-        console.log(pokemon.types);
         pokemon.types.forEach(type =>{
             let imageType = document.createElement("img");
-            imageType.src = type.imageLink();
+            imageType.src = type.imageLink;
             divTypes.append(imageType);
         });
         div.append(divTypes);
-
-        
-
 
         view.screen.append(div);
     }

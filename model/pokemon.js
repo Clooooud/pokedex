@@ -31,7 +31,7 @@ class Pokemon{
     /**
      * Stats du pokemon
      * @type {Array}
-     * @see fetchInfo
+     * @see fetch
      */
     #stats;
 
@@ -44,21 +44,21 @@ class Pokemon{
     /**
      * Types du pokémon
      * @type {Array}
-     * @see fetchInfo
+     * @see fetch
      */
     #types;
 
     /**
      * Abilitées du pokémon
      * @type {Array}
-     * @see fetchInfo
+     * @see fetch
      */
     #abilities;
 
     /**
      * Sprites du pokémon
      * @type {Object}
-     * @see fetchInfo
+     * @see fetch
      */
     #sprites;
 
@@ -78,7 +78,7 @@ class Pokemon{
         this.#name = name;
     }
 
-    async fetchInfo() {
+    async fetch() {
         const json = await pokeFetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
         const jsonSpecies = await pokeFetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
 

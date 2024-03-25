@@ -269,6 +269,11 @@ class Controller {
         }
 
         div.append(divImages);
+
+        let divPhysic = document.createElement("div");
+        divPhysic.innerHTML = (pokemon.height / 100) + "m - " + pokemon.weight + "kg";
+
+        div.append(divPhysic);
         div.append(document.createElement("hr"));
 
         // Ablility du Pokemon

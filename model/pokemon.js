@@ -23,6 +23,11 @@ class Pokemon{
     #height;
 
     /**
+     * Poids en kg
+     */
+    #weight;
+
+    /**
      * Stats du pokemon
      * @type {Array}
      * @see fetch
@@ -91,6 +96,8 @@ class Pokemon{
             }
         });
 
+        this.#weight = json.weight / 10; // Poids en hectogramme de base
+
         Object.keys(jsonSpecies).filter(key => key !== "names").forEach(key => {
             delete jsonSpecies[key];
         });
@@ -146,7 +153,7 @@ class Pokemon{
         }));
 
         // On supprime les informations inutiles
-        const usedKeys = ["height", "types", "stats", "abilities"];
+        const usedKeys = ["height", "weight", "types", "stats", "abilities"];
         Object.keys(json).filter(key => !usedKeys.includes(key)).forEach(key => {
             delete json[key];
         });
@@ -190,11 +197,26 @@ class Pokemon{
     get stats(){
         return this.#stats;  
     }
+
     /**
      * @returns {Object} Sprites du pokémon
      */
     get sprites() {
         return this.#sprites;
+    }
+
+    /**
+     * @returns {Number} Hauteur du pokémon en cm
+     */
+    get height() {
+        return this.#height;
+    }
+
+    /**
+     * @returns {Number} Poids du pokémon en kg
+     */
+    get weight() {
+        return this.#weight;
     }
 
     /**

@@ -217,9 +217,11 @@ class Controller {
         image1.src = pokemon.sprites.front; 
         divImages.append(image1);
         
-        let image2 = document.createElement("img");
-        image2.src = pokemon.sprites.back;
-        divImages.append(image2);
+        if (pokemon.sprites.back !== null) { // Certains pokémons n'ont pas de sprite de dos
+            let image2 = document.createElement("img");
+            image2.src = pokemon.sprites.back;
+            divImages.append(image2);
+        }
 
         div.append(divImages);
         div.append(document.createElement("hr"));

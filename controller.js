@@ -263,17 +263,19 @@ class Controller {
         div.append(divStat);
 
         let cry = document.createElement("button");
-        cry.click = this.playSound(pokemon);
+        cry.classList.add("button");
+        cry.innerHTML = "🔊";
+        cry.id = "sound-button";
+        cry.addEventListener("click", () => this.#playSound(pokemon));
         div.append(cry); 
 
         view.screen.append(div);
     }
 
-    playSound(pokemon){
-        let audio = new Audio(pokemon.cry);
+    async #playSound(pokemon){
+        const audio = new Audio("https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1.ogg");
         audio.volume = 0.15;
-        audio.play;
-        return audio;
+        audio.play();
     }
 
 }

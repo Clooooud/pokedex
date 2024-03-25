@@ -4,14 +4,8 @@ import Stat from "./stat.js";
 
 class Pokemon{
 
-    /***
-     * Nom du pokémon
-     * @type {string}
-     */
-    #name; 
-
     /**
-     * Nom traduit du pokémon
+     * Noms traduits du pokémon
      * @type {string}
      */
     #translatedNames;
@@ -78,22 +72,25 @@ class Pokemon{
         this.#translatedNames = {};
     }
 
+    /**
+     * Récupération des informations concernant le pokémon depuis l'API
+     */
     async fetch() {
         const json = await pokeFetch(`pokemon/${this.#id}/`);
         const jsonSpecies = await pokeFetch(`pokemon-species/${this.#id}/`);
-
-        // Récupération du nom du pokémon
-        this.#name = json.name;
 
         // Récupération des noms traduits du pokémon
         jsonSpecies.names.filter(name => name != null).forEach((name, index) => {
             const language = window.languages.find(language => language.getLanguageRegex().test(name.language.url));
             if (language) {
                 this.#translatedNames[language.id] = name.name;
+                // On supprime les informations inutiles
+                delete name.language.name;
             } else {
                 delete jsonSpecies.names[index]; // Optimisation du cache
             }
         });
+
         Object.keys(jsonSpecies).filter(key => key !== "names").forEach(key => {
             delete jsonSpecies[key];
         });
@@ -102,7 +99,7 @@ class Pokemon{
         //Récupération de la taille du pokémon
         this.#height = json.height * 10; // Hauteur en décimètre de base
         //Récupération des cries
-        this.#cry = json.cries.latest;
+        this.#cry = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${this.#id}.ogg`;
         //Récupération des sprites
         // Lien statique, pas d'image de dos après le 898ème pokémon
         this.#sprites = {
@@ -115,36 +112,45 @@ class Pokemon{
         // Récupération du/des types du pokemon dans le JSON puis sa création en Object de type Type 
         this.#types = [];
         json.types.forEach(type => {
-            delete type.type.url;
             const typeObject = new Type(type.type.name);
             this.#types.push(typeObject);
+
+            // On supprime les informations inutiles
+            delete type.type.url;
+            delete type.slot;
         })
 
         // Récupération du/des stats du pokemon dans le JSON puis sa création en Object de type Stat
         this.#stats = [];
         await Promise.all(json.stats.map(async stat => {
-            delete stat.stat.url;
-            delete stat.effort;
             const statObject = new Stat(stat.base_stat);
             await statObject.fetch(stat.stat.name);
             this.#stats.push(statObject); 
+
+            // On supprime les informations inutiles
+            delete stat.stat.url;
+            delete stat.effort;
         }));
 
         // Récupération du/des abilitées du pokemon dans le JSON puis sa création en Object de type Ability
         this.#abilities = [];
         await Promise.all(json.abilities.map(async ability => {
-            delete ability.ability.url;
-            delete ability.is_hidden;
-            delete ability.slot;
             const abilityObject = new Ability(ability.ability.name);
             await abilityObject.fetch();
             this.#abilities.push(abilityObject);
+
+            // On supprime les informations inutiles
+            delete ability.ability.url;
+            delete ability.is_hidden;
+            delete ability.slot;
         }));
 
-        const usedKeys = ["height", "cries", "types", "stats", "abilities"];
+        // On supprime les informations inutiles
+        const usedKeys = ["height", "types", "stats", "abilities"];
         Object.keys(json).filter(key => !usedKeys.includes(key)).forEach(key => {
             delete json[key];
         });
+
         pokeCache(`pokemon/${this.#id}/`, json);
     }
 
@@ -156,23 +162,24 @@ class Pokemon{
     }
 
     /**
-     * @returns {string} Nom du pokémon
-     */
-    get name() {
-        return this.#name;
-    }
-
-    /**
      * @returns {number} Id du pokémon
      */
     get id() {
         return this.#id;
     }
 
+    /**
+     * Retourne vrai si le pokémon est favoris
+     * @returns {Boolean} Booléen pour savoir si le pokémon est favoris
+     */
     get isFavorite() {
         return this.#isFavorite;
     }
 
+    /**
+     * Permet de définir si le pokémon est favoris
+     * @param {Boolean} value
+     */
     set isFavorite(value) {
         this.#isFavorite = value;
     }

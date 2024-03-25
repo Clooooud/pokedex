@@ -27,6 +27,9 @@ class Ability{
         this.#descriptions = {};
     }
 
+    /**
+     * Récupération des informations concernant l'objet Ability depuis l'API
+     */
     async fetch(){
         const json = await pokeFetch(`ability/${this.#name}/`);
 
@@ -42,6 +45,8 @@ class Ability{
         })
 
 
+        // L'API nous renvoie plusieurs descriptions selon la langue et la version du jeu
+        // Généralement, les descriptions sont les mêmes, donc on se permet de ne garder que le premier dans le cache
         const alreadySeenLanguages = [];
 
         // Récupération de la description de l'abilitées

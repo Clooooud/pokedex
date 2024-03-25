@@ -2,7 +2,7 @@ import Pokemon from "./pokemon.js";
 
 /**
  *  Un pokédex contient la page du pokémon sélectionné ainsi qu'une liste de pokémon
- * @see Pokemon
+ *  @see Pokemon
  */ 
 class Pokedex {
 
@@ -68,6 +68,11 @@ class Pokedex {
         }
     }
 
+    /**
+     * Récupère le pokémon correspondant à l'id
+     * @param {Number} id 
+     * @returns 
+     */
     getPokemon(id) {
         return this.#pokemons.filter(pokemon => pokemon.id == id)[0];
     }
@@ -113,6 +118,9 @@ class Pokedex {
         return this.#pokemons.filter(pokemon => pokemon.isFavorite);
     }
 
+    /**
+     * Change la catégorie actuelle
+     */
     cycleCategories() {
         this.#category = this.#category === "all" ? "favorite" : "all";
         this.search(null);
@@ -182,6 +190,10 @@ class Pokedex {
         return this.getPokemons().slice(this.#page * Pokedex.#POKEMONS_PER_PAGE, (this.#page + 1) * Pokedex.#POKEMONS_PER_PAGE);
     }
 
+    /**
+     * Met à jour la recherche actuelle
+     * @param {String} research 
+     */
     search(research) {
         this.#search = research;
         this.#searchedCache = null;

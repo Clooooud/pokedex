@@ -1,6 +1,7 @@
 import Pokedex from "./model/pokedex.js";
 import view from "./view.js";
 import Language from "./model/language.js";
+import Pokemon from "./model/pokemon.js";
 
 class Controller {
 
@@ -33,15 +34,24 @@ class Controller {
         window.language = this.#languages[this.#language];
     }
 
+    /**
+     * Initialise le contrôleur
+     */
     init() {
         this.#listenEvents();
         this.#load();
     }
 
+    /**
+     * Met à jour l'affichage du compteur de page
+     */
     #updatePageDisplay() {
         view.pageDisplay.innerHTML = `${this.#pokedex.page + 1}/${this.#pokedex.getPageMax() + 1}`;
     }
 
+    /**
+     * Ecoute les évènements de l'interface
+     */
     #listenEvents() {
         view.closeSearchButton.addEventListener("click", () => this.#clearSearch());
 
@@ -54,7 +64,7 @@ class Controller {
         view.favoriteCategoryButton.addEventListener("click", () => this.#goToFavorites());
         view.mainCategoryButton.addEventListener("click", () => this.#goToMainMenu());
 
-        view.favoriteButton.addEventListener("click", () => this.#addToFavorites());
+        view.favoriteButton.addEventListener("click", () => this.#toggleFavorite());
 
         for (let buttonId = 0; buttonId < view.keyboard.children.length; buttonId++) {
             const button = view.keyboard.children[buttonId];
@@ -62,6 +72,9 @@ class Controller {
         }
     }
 
+    /**
+     * Efface la recherche en cours
+     */
     #clearSearch() {
         view.searchInput.value = "";
         this.#pokedex.search(null);
@@ -69,18 +82,29 @@ class Controller {
         this.#updateList();
     }
 
+    /**
+     * Recherche un pokémon en fonction de la valeur de l'input de recherche
+     */
     #search() {
         this.#pokedex.search(view.searchInput.value);
         this.#updatePageDisplay();
         this.#updateList();
     }
     
+    /**
+     * Change la page du pokédex en fonction d'un décalage, positif ou négatif
+     * @param {Number} offset 
+     */
     #changePage(offset) {
         this.#pokedex.changePage(offset);
         this.#updatePageDisplay();
         this.#updateList();
     }
 
+    /**
+     * Sélectionne un pokémon en le récupérant depuis la liste des pokémons affichés avec l'id du bouton de la liste de pokémon
+     * @param {Number} buttonId 
+     */
     #selectPokemon(buttonId) {
         const pokemon = this.#pokedex.getPokemonsOnPage()[buttonId];
 
@@ -112,15 +136,24 @@ class Controller {
         this.#updateList();
     }
 
+    /**
+     * Change la catégorie pour les favoris
+     */
     #goToFavorites() {
         this.#goTo(view.favoriteCategoryButton);
     }
 
+    /**
+     * Change la catégorie pour tous les pokémons
+     */
     #goToMainMenu() {
         this.#goTo(view.mainCategoryButton);
     }
 
-    #addToFavorites() {
+    /**
+     * Ajoute ou retire un pokémon des favoris
+     */
+    #toggleFavorite() {
         if (this.#pokedex.selection === null) {
             return;
         }
@@ -138,12 +171,18 @@ class Controller {
         this.#updateScreen();
     }
 
+    /**
+     * Charge les données du pokédex
+     */
     async #load() {
         await this.#pokedex.fetchPokemons();
         this.#pokedex.loadFavorites();
         this.#updateList();
     }
 
+    /**
+     * Met à jour la liste des pokémons affichés
+     */
     #updateList() {
         const pokemonsOnPage = this.#pokedex.getPokemonsOnPage();
         for (let buttonId = 0; buttonId < 20; buttonId++) {
@@ -166,6 +205,9 @@ class Controller {
         }
     }
 
+    /**
+     * Change la langue du pokédex
+     */
     #toggleLanguage() {
         this.#language = (this.#language+1) % this.#languages.length
         window.language = this.#languages[this.#language];
@@ -174,6 +216,9 @@ class Controller {
         this.#updateScreen();
     }
 
+    /**
+     * Met à jour l'écran de détails du pokémon
+     */
     async #updateScreen(){
         if (this.#pokedex.selection === null) {
             view.screen.innerHTML = "";
@@ -274,7 +319,11 @@ class Controller {
         view.screen.append(div);
     }
 
-    async #playSound(pokemon){
+    /**
+     * Joue le crie du pokémon
+     * @param {Pokemon} pokemon 
+     */
+    #playSound(pokemon){
         const audio = new Audio(pokemon.cry);
         audio.volume = 0.15;
         audio.play();
@@ -284,12 +333,15 @@ class Controller {
 
 /**
  * Récupère les données de l'API et les stocke dans le localStorage
- * Différence avec le fetch classique : on récupère directement le contenu sous format json et on le stocke dans le localStorage
+ * Différence avec le fetch classique : on récupère directement le contenu sous format json
  * 
  * On stocke le json avec pour clé l'url de la requête, on peut donc retrouver très facilement les données
  * 
+ * On a retiré la partie commune de l'URL : "https://pokeapi.co/api/v2/"
+ * Cela optimise le stockage des données, car on ne stocke pas l'url en boucle
+ * 
  * @param {String} url 
- * @returns 
+ * @returns {Object}
  */
 window.pokeFetch = async (url) => {
     const item = localStorage.getItem(url);
@@ -303,6 +355,16 @@ window.pokeFetch = async (url) => {
     return result;
 }
 
+/**
+ * On sauvegarde les données dans le localStorage
+ * 
+ * Ce qui est important est de filtrer les données, on ne veut pas stocker des données inutiles
+ * Auparavant, on ne faisait pas la différence entre les données, et on pouvait toucher la limite de certains navigateurs.
+ * Le filtrage est à réaliser avant d'appeler cette fonction !!
+ * 
+ * @param {String} url 
+ * @param {String} data 
+ */
 window.pokeCache = (url, data) => {
     localStorage.setItem(url, JSON.stringify(data));
 };

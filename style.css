@@ -13,6 +13,11 @@
     --button-end: #222;
 }
 
+p {
+    margin: 0;
+    font-size: 10px;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -252,9 +257,77 @@ body {
     border-radius: 30px;
     box-sizing: border-box;
 
+    padding: 15px;
+
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+#screen-sprites-div {
+    height: 75px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#screen-sprites-div img {
+    height: 100%;
+    width: auto;
+}
+
+#screen-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#screen-content h1 {
+    margin: 0;
+    font-size: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#screen-types-div {
+    height: 16px;
+}
+
+#screen-types-div img {
+    height: 100%;
+    width: auto;
+}
+
+#screen-content hr {
+    width: 100%;
+}
+
+#screen-content h2 {
+    font-size: 14px;
+    margin: 0;
+}
+
+#screen-stats-div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#screen-stats-div > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3px;
+    justify-content: end;
+}
+
+#screen-stats-div p {
+    flex: 2;
+    font-size: 9px;
+}
+
+#screen-stats-div .stat-bar {
+    height: 15px;
+    background: linear-gradient(var(--pokedex-color), var(--darker-pokedex-color));
 }
 
 #screen::-webkit-scrollbar {

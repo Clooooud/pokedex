@@ -163,14 +163,14 @@ class Controller {
         view.favoriteButton.innerHTML = this.#pokedex.isFavorite(this.#pokedex.selection) ? "❤️" : "♡";
 
         let div = document.createElement("div");
+        div.id = "screen-content";
         // Nom du Pokémon
-        let namePokemon = document.createElement("p");
+        let namePokemon = document.createElement("h1");
         namePokemon.innerHTML = pokemon.name;
-        namePokemon.style.textAlign = "center";
-        namePokemon.style.textTransform = "uppercase";
 
         // Types du Pokémon
         let divTypes = document.createElement("div");
+        divTypes.id = "screen-types-div";
         pokemon.types.forEach(type =>{
             let imageType = document.createElement("img");
             imageType.src = type.imageLink;
@@ -182,6 +182,7 @@ class Controller {
 
         // Sprites du Pokémon
         let divImages = document.createElement("div");
+        divImages.id = "screen-sprites-div"
         
         let image1 = document.createElement("img");
         image1.src = pokemon.sprites.front; 
@@ -189,40 +190,48 @@ class Controller {
         
         let image2 = document.createElement("img");
         image2.src = pokemon.sprites.back;
-        
-        divImages.style.display = "flex";
-        divImages.style.justifyContent = "space-evenly";
         divImages.append(image2);
+
         div.append(divImages);
-
-        let divStatsAndAbilities = document.createElement("div");
-        divStatsAndAbilities.style.display = "flex";
-        divStatsAndAbilities.style.flexDirection = "row";
-
-        // Stats du Pokémon 
-        let divStat = document.createElement("div");
-        divStat.style.padding= "10px";
-        pokemon.stats.forEach(stat =>{
-            let pStat = document.createElement("p");
-            pStat.innerHTML = stat.name + " : " + stat.value;
-            pStat.style.margin = "0%";
-            pStat.style.fontSize = "10px";
-            divStat.append(pStat);
-        });
-        divStatsAndAbilities.append(divStat);
+        div.append(document.createElement("hr"));
 
         // Ablility du Pokemon
         let divAbilities = document.createElement("div");
-        divAbilities.style.padding= "10px";
+        let titleAbilities = document.createElement("h2");
+        titleAbilities.innerHTML = "Abilities";
+        divAbilities.append(titleAbilities);
+
         pokemon.abilities.forEach(ability=>{
             let pAbility = document.createElement("p");
             pAbility.innerHTML = ability.name + " : " + ability.description;
-            pAbility.style.margin = "0%";
-            pAbility.style.fontSize = "10px";
             divAbilities.append(pAbility);
         });
-        divStatsAndAbilities.append(divAbilities);
-        div.append(divStatsAndAbilities);
+        div.append(divAbilities);
+        div.append(document.createElement("hr"));
+
+        // Stats du Pokémon 
+        let divStat = document.createElement("div");
+        divStat.id = "screen-stats-div";
+
+        let titleStats = document.createElement("h2");
+        titleStats.innerHTML = "Stats";
+        divStat.append(titleStats);
+
+        pokemon.stats.forEach(stat =>{
+            let lineDiv = document.createElement("div");
+            
+            let pStat = document.createElement("p");
+            pStat.innerHTML = stat.name + ` (${stat.value})`;
+
+            let statBar = document.createElement("div");
+            statBar.classList.add("stat-bar");
+            statBar.style.width = stat.value + "px";
+
+            lineDiv.append(pStat);
+            lineDiv.append(statBar);
+            divStat.append(lineDiv);
+        });
+        div.append(divStat);
 
         view.screen.append(div);
     }

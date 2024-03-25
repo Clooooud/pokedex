@@ -30,13 +30,10 @@ class Ability{
         this.#description = json.flavor_text_entries.find(entry => {
             // Important de le définir dans la fonction pour éviter des erreurs
             // car RegExp est horriblement mal fait ???
-            console.log(entry)
             const regex = /language\/(\d+)\//g; // On récupère le numéro de la langue dans le lien
             const result = regex.exec(entry.language.url);
-            console.log(result)
             return result[1] === '9';
         }).flavor_text;
-        console.log(this.#description)
     }    
     
     /**

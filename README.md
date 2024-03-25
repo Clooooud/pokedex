@@ -2,7 +2,8 @@
 
 This project is a sort of visualisation of the PokéAPI in a cool and simple GUI.
 
-## Features:
+## Features
+
 - List all pokemons using pages
 - Search through all the pokemons using the english name
 - Change the display language between English and French (not the search one we're sadly limited by the API)
@@ -16,7 +17,7 @@ This project is a sort of visualisation of the PokéAPI in a cool and simple GUI
     - Abilities (Name and description)
     - Base stats
 
-## What's missing:
+## What's missing
 
 Nothing feature-wise! We can still improve the design with more detail or improve the code, notably the cache optimization parts that has been done really quickly.
 <br>

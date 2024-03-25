@@ -3,6 +3,13 @@ import Ability from "./ability.js";
 import Stat from "./stat.js";
 
 class Pokemon{
+    
+    /**
+     * Nom du pokémon
+     * Utile pour les recherches
+     * @type {string}
+     */
+    #name;
 
     /**
      * Noms traduits du pokémon
@@ -72,8 +79,9 @@ class Pokemon{
      * @param {number} id 
      * @param {string} nomPokemon
      */
-    constructor(id){
+    constructor(id, name){
         this.#id = id;
+        this.#name = name;
         this.#translatedNames = {};
     }
 
@@ -159,6 +167,13 @@ class Pokemon{
         });
 
         pokeCache(`pokemon/${this.#id}/`, json);
+    }
+
+    /**
+     * @returns {string} Nom du pokémon
+     */
+    get name() {
+        return this.#name;
     }
 
     /**

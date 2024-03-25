@@ -63,9 +63,14 @@ class Pokedex {
             return;
         }
 
-        for (let id = 0; id < Pokedex.#NUMBER_OF_POKEMONS; id++) {
-            this.#pokemons.push(new Pokemon(id+1));
-        }
+        await pokeFetch(`pokemon/?limit=${Pokedex.#NUMBER_OF_POKEMONS}`)
+            .then(json => json.results)
+            .then(results => {
+                results.forEach((pokemon, id) => this.#pokemons.push(
+                    // +1 car l'id commence à 1
+                    new Pokemon(id+1, pokemon.name)
+                ))
+            });
     }
 
     /**

@@ -233,8 +233,20 @@ class Controller {
         });
         div.append(divStat);
 
+        let cry = document.createElement("button");
+        cry.click = this.playSound(pokemon);
+        div.append(cry); 
+
         view.screen.append(div);
     }
+
+    playSound(pokemon){
+        let audio = new Audio(pokemon.cry);
+        audio.volume = 0.15;
+        audio.play;
+        return audio;
+    }
+
 }
 
 /**

@@ -181,6 +181,14 @@ class Pokemon{
     get abilities(){
         return this.#abilities;
     }
+
+    /**
+     * @return {string} URL de l'audio .ogg
+     */
+    get cry(){
+        return this.#cry;
+    }
+
 }
 
 export default Pokemon;

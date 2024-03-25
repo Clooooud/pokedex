@@ -128,7 +128,8 @@ class Pokedex {
      */
     cycleCategories() {
         this.#category = this.#category === "all" ? "favorite" : "all";
-        this.search(null);
+        this.#searchedCache = null;
+        this.#page = 0;
     }
 
     /**

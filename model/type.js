@@ -12,12 +12,7 @@ class Type {
     constructor(name){
         this.#name = name;
     }
-
-    async fetch(){
-        const json = await pokeFetch(`https://pokeapi.co/api/v2/type/${this.#name}/`);
-        // Récupération du nom du type dans le bon langage
-        this.#name = json.names[7].name;
-    }    
+    
     /**
      * @returns {string} Nom du type
      */

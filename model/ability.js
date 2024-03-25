@@ -7,33 +7,46 @@ class Ability{
     #name
 
     /**
-     * 
-     * @type {string}
+     * Noms traduits de l'abilité
+     * @type {Object}
      */
-    #description
+    #translatedNames
+
+    /**
+     * Descriptions traduits de l'abilité
+     * @type {Object}
+     */
+    #descriptions
 
     /**
      * @param {string} name 
      */
     constructor(name){
         this.#name = name;
+        this.#translatedNames = {};
+        this.#descriptions = {};
     }
 
     async fetch(){
         const json = await pokeFetch(`https://pokeapi.co/api/v2/ability/${this.#name}/`);
         
         // Récupération du nom de l'abilitées dans le bon langage
-        this.#name = json.names[7].name;
+        json.names.forEach(name => {
+            const language = window.languages.find(language => language.getLanguageRegex().test(name.language.url));
+            if (language) {
+                this.#translatedNames[language.id] = name.name;
+            }
+        })
+
         // Récupération de la description de l'abilitées
         // Format du lien : https://pokeapi.co/api/v2/language/6/
         // On voudrait le '6' ici par exemple.
-        this.#description = json.flavor_text_entries.find(entry => {
-            // Important de le définir dans la fonction pour éviter des erreurs
-            // car RegExp est horriblement mal fait ???
-            const regex = /language\/(\d+)\//g; // On récupère le numéro de la langue dans le lien
-            const result = regex.exec(entry.language.url);
-            return result[1] === '9';
-        }).flavor_text;
+        json.flavor_text_entries.forEach(entry => {
+            const language = window.languages.find(language => language.getLanguageRegex().test(entry.language.url));
+            if (language) {
+                this.#descriptions[language.id] = entry.flavor_text;
+            }
+        })
     }    
     
     /**
@@ -43,10 +56,14 @@ class Ability{
         return this.#name;
     }
     /**
-     * @returns {string} Description de l'abilitées du pokémon
+     * @returns {Object} Descriptions de l'abilitées du pokémon
      */
-    get description(){
-        return this.#description;
+    get descriptions(){
+        return this.#descriptions;
+    }
+
+    get translatedNames() {
+        return this.#translatedNames;
     }
 }
 export default Ability;

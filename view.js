@@ -5,6 +5,7 @@ const view = {
 
     keyboard: document.getElementById("keyboard"),
 
+    flagButton: document.getElementById("flag-button"),
     pageDisplay: document.getElementById("page-display"),
     previousButton: document.getElementById("prev-button"),
     nextButton: document.getElementById("next-button"),

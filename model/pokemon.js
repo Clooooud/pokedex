@@ -14,7 +14,7 @@ class Pokemon{
      * Nom traduit du pokémon
      * @type {string}
      */
-    #translatedName;
+    #translatedNames;
     
     /**
      * Id du pokemon
@@ -76,14 +76,19 @@ class Pokemon{
     constructor(id, name){
         this.#id = id;
         this.#name = name;
+        this.#translatedNames = {};
     }
 
     async fetch() {
         const json = await pokeFetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
         const jsonSpecies = await pokeFetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
 
-        // TODO: langage
-        this.#translatedName = jsonSpecies.names[7].name;
+        jsonSpecies.names.forEach(name => {
+            const language = window.languages.find(language => language.getLanguageRegex().test(name.language.url));
+            if (language) {
+                this.#translatedNames[language.id] = name.name;
+            }
+        });
         //Récupération de la taille du pokémon
         this.#height = json.height * 10; // Hauteur en décimètre de base
         //Récupération des cries
@@ -96,11 +101,10 @@ class Pokemon{
 
         // Récupération du/des types du pokemon dans le JSON puis sa création en Object de type Type 
         this.#types = [];
-        await Promise.all(json.types.map(async type => {
+        json.types.forEach(type => {
             const typeObject = new Type(type.type.name);
-            await typeObject.fetch();
             this.#types.push(typeObject);
-        }));
+        })
 
         // Récupération du/des stats du pokemon dans le JSON puis sa création en Object de type Stat
         this.#stats = [];
@@ -162,10 +166,10 @@ class Pokemon{
     }
 
     /**
-     * @returns {String} Nom traduit du pokémon
+     * @returns {Object} Noms traduits du pokémon
      */
-    get translatedName() {
-        return this.#translatedName;
+    get translatedNames() {
+        return this.#translatedNames;
     }
 
     /**

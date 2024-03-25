@@ -1,5 +1,6 @@
 import Pokedex from "./model/pokedex.js";
 import view from "./view.js";
+import Language from "./model/language.js";
 
 class Controller {
 
@@ -9,8 +10,27 @@ class Controller {
      */
     #pokedex;
 
+    /**
+     * Liste des langages
+     * @type {Array}
+     */
+    #languages;
+
+    /**
+     * Index du langage actuel
+     * @type {Number}
+     * @see #languages
+     */
+    #language;
+
     constructor() {
         this.#pokedex = new Pokedex();
+        this.#languages = [];
+        this.#languages.push(new Language(9, "English", "🇺🇸"), new Language(5, "Français", "🇫🇷"));
+        this.#language = 0;
+
+        window.languages = this.#languages;
+        window.language = this.#languages[this.#language];
     }
 
     init() {
@@ -27,6 +47,7 @@ class Controller {
 
         view.searchButton.addEventListener("click", () => this.#search());
 
+        view.flagButton.addEventListener("click", () => this.#toggleLanguage());
         view.previousButton.addEventListener("click", () => this.#changePage(-1));
         view.nextButton.addEventListener("click", () => this.#changePage(1));
 
@@ -145,6 +166,14 @@ class Controller {
         }
     }
 
+    #toggleLanguage() {
+        this.#language = (this.#language+1) % this.#languages.length
+        window.language = this.#languages[this.#language];
+
+        view.flagButton.innerHTML = window.language.flag;
+        this.#updateScreen();
+    }
+
     async #updateScreen(){
         if (this.#pokedex.selection === null) {
             view.screen.innerHTML = "";
@@ -166,7 +195,7 @@ class Controller {
         div.id = "screen-content";
         // Nom du Pokémon
         let namePokemon = document.createElement("h1");
-        namePokemon.innerHTML = pokemon.name;
+        namePokemon.innerHTML = pokemon.translatedNames[window.language.id];
 
         // Types du Pokémon
         let divTypes = document.createElement("div");
@@ -198,12 +227,12 @@ class Controller {
         // Ablility du Pokemon
         let divAbilities = document.createElement("div");
         let titleAbilities = document.createElement("h2");
-        titleAbilities.innerHTML = "Abilities";
+        titleAbilities.innerHTML = window.language.name == "English" ? "Abilities" : "Talents";
         divAbilities.append(titleAbilities);
 
         pokemon.abilities.forEach(ability=>{
             let pAbility = document.createElement("p");
-            pAbility.innerHTML = ability.name + " : " + ability.description;
+            pAbility.innerHTML = ability.translatedNames[window.language.id] + " : " + ability.descriptions[window.language.id];
             divAbilities.append(pAbility);
         });
         div.append(divAbilities);
@@ -219,9 +248,9 @@ class Controller {
 
         pokemon.stats.forEach(stat =>{
             let lineDiv = document.createElement("div");
-            
+
             let pStat = document.createElement("p");
-            pStat.innerHTML = stat.name + ` (${stat.value})`;
+            pStat.innerHTML = stat.translatedNames[window.language.id] + ` (${stat.value})`;
 
             let statBar = document.createElement("div");
             statBar.classList.add("stat-bar");

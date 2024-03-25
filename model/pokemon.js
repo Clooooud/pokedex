@@ -111,9 +111,6 @@ class Pokemon{
                                 : null,
             "front": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.#id}.png`
         };
-        Object.keys(json.sprites).filter(key => !["back_default", "front_default"].includes(key)).forEach(key => {
-            delete json.sprites[key];
-        });
 
         // Récupération du/des types du pokemon dans le JSON puis sa création en Object de type Type 
         this.#types = [];

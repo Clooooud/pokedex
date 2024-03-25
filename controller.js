@@ -273,7 +273,7 @@ class Controller {
     }
 
     async #playSound(pokemon){
-        const audio = new Audio("https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1.ogg");
+        const audio = new Audio(pokemon.cry);
         audio.volume = 0.15;
         audio.play();
     }

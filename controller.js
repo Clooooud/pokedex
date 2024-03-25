@@ -297,9 +297,14 @@ window.pokeFetch = async (url) => {
         return JSON.parse(item);
     }
 
-    const result = await fetch(url).then(response => response.json());
-    localStorage.setItem(url, JSON.stringify(result));
+    const result = await fetch("https://pokeapi.co/api/v2/" + url).then(response => response.json());
+    // On peut pas se permettre de tout stocker parce que le local storage a une limite de 5Mo
+    // localStorage.setItem(url, JSON.stringify(result));
     return result;
 }
+
+window.pokeCache = (url, data) => {
+    localStorage.setItem(url, JSON.stringify(data));
+};
 
 new Controller().init();

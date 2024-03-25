@@ -29,14 +29,23 @@ class Stat{
     }
 
     async fetch(idString){
-        const json = await pokeFetch(`https://pokeapi.co/api/v2/stat/${idString}/`);
+        const json = await pokeFetch(`stat/${idString}/`);
         // Récupération du nom du stat dans le bon langage
-        json.names.forEach(name => {
+        json.names.filter(name => name != null).forEach((name, index) => {
             const language = window.languages.find(language => language.getLanguageRegex().test(name.language.url));
             if (language) {
                 this.#translatedNames[language.id] = name.name;
+                delete name.language.name;
+            } else {
+                delete json.names[index]; // Optimisation du cache
             }
         })
+
+        // Sauvegarde de l'utile dans le cache
+        Object.keys(json).filter(key => key !== "names").forEach(key => {
+            delete json[key];
+        });
+        pokeCache(`stat/${idString}/`, json);
     }
     /**
      * @returns {string} Nom du stat

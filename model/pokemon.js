@@ -73,35 +73,52 @@ class Pokemon{
      * @param {number} id 
      * @param {string} nomPokemon
      */
-    constructor(id, name){
+    constructor(id){
         this.#id = id;
-        this.#name = name;
         this.#translatedNames = {};
     }
 
     async fetch() {
-        const json = await pokeFetch(`https://pokeapi.co/api/v2/pokemon/${this.#id}/`);
-        const jsonSpecies = await pokeFetch(`https://pokeapi.co/api/v2/pokemon-species/${this.#id}/`);
+        const json = await pokeFetch(`pokemon/${this.#id}/`);
+        const jsonSpecies = await pokeFetch(`pokemon-species/${this.#id}/`);
 
-        jsonSpecies.names.forEach(name => {
+        // Récupération du nom du pokémon
+        this.#name = json.name;
+
+        // Récupération des noms traduits du pokémon
+        jsonSpecies.names.filter(name => name != null).forEach((name, index) => {
             const language = window.languages.find(language => language.getLanguageRegex().test(name.language.url));
             if (language) {
                 this.#translatedNames[language.id] = name.name;
+            } else {
+                delete jsonSpecies.names[index]; // Optimisation du cache
             }
         });
+        Object.keys(jsonSpecies).filter(key => key !== "names").forEach(key => {
+            delete jsonSpecies[key];
+        });
+        pokeCache(`pokemon-species/${this.#id}/`, jsonSpecies);
+
         //Récupération de la taille du pokémon
         this.#height = json.height * 10; // Hauteur en décimètre de base
         //Récupération des cries
         this.#cry = json.cries.latest;
         //Récupération des sprites
+        // Lien statique, pas d'image de dos après le 898ème pokémon
         this.#sprites = {
-            "back": json.sprites.back_default,
-            "front": json.sprites.front_default
+            "back": this.#id <= 898 
+                                ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${this.#id}.png` 
+                                : null,
+            "front": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.#id}.png`
         };
+        Object.keys(json.sprites).filter(key => !["back_default", "front_default"].includes(key)).forEach(key => {
+            delete json.sprites[key];
+        });
 
         // Récupération du/des types du pokemon dans le JSON puis sa création en Object de type Type 
         this.#types = [];
         json.types.forEach(type => {
+            delete type.type.url;
             const typeObject = new Type(type.type.name);
             this.#types.push(typeObject);
         })
@@ -109,6 +126,8 @@ class Pokemon{
         // Récupération du/des stats du pokemon dans le JSON puis sa création en Object de type Stat
         this.#stats = [];
         await Promise.all(json.stats.map(async stat => {
+            delete stat.stat.url;
+            delete stat.effort;
             const statObject = new Stat(stat.base_stat);
             await statObject.fetch(stat.stat.name);
             this.#stats.push(statObject); 
@@ -117,10 +136,19 @@ class Pokemon{
         // Récupération du/des abilitées du pokemon dans le JSON puis sa création en Object de type Ability
         this.#abilities = [];
         await Promise.all(json.abilities.map(async ability => {
+            delete ability.ability.url;
+            delete ability.is_hidden;
+            delete ability.slot;
             const abilityObject = new Ability(ability.ability.name);
             await abilityObject.fetch();
             this.#abilities.push(abilityObject);
         }));
+
+        const usedKeys = ["height", "cries", "types", "stats", "abilities"];
+        Object.keys(json).filter(key => !usedKeys.includes(key)).forEach(key => {
+            delete json[key];
+        });
+        pokeCache(`pokemon/${this.#id}/`, json);
     }
 
     /**

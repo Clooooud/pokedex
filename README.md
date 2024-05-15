@@ -21,5 +21,5 @@ This project is a sort of visualisation of the PokéAPI in a cool and simple GUI
 
 Nothing feature-wise! We can still improve the design with more detail or improve the code, notably the cache optimization parts that has been done really quickly.
 <br>
-We could add more languages or add a way to make it dynamical. Actually the languages are entered directly in the code.
+We could add more languages or add a way to make it dynamical. At the moment, languages are statically typed directly in the code.
 If languages were added dynamically, we would need to redesign the language toggle.
